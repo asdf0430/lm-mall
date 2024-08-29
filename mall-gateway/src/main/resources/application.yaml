@@ -1,0 +1,117 @@
+server:
+  port: 8201
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: mall-auth
+          uri: lb://mall-auth
+          predicates:
+            - Path=/mall-auth/**
+          filters:
+            - StripPrefix=1
+        - id: mall-admin
+          uri: lb://mall-admin
+          predicates:
+            - Path=/mall-admin/**
+          filters:
+            - StripPrefix=1
+        - id: mall-portal
+          uri: lb://mall-portal
+          predicates:
+            - Path=/mall-portal/**
+          filters:
+            - StripPrefix=1
+        - id: mall-search
+          uri: lb://mall-search
+          predicates:
+            - Path=/mall-search/**
+          filters:
+            - StripPrefix=1
+        - id: mall-demo
+          uri: lb://mall-demo
+          predicates:
+            - Path=/mall-demo/**
+          filters:
+            - StripPrefix=1
+  data:
+    redis:
+      database: 0
+      port: 6379
+      host: localhost
+      password:
+secure:
+  ignore:
+    urls:
+      - "/doc.html"
+      - "/v3/api-docs/swagger-config"
+      - "/*/v3/api-docs/default"
+      - "/*/v3/api-docs"
+      - "/*/swagger-ui/**"
+      - "/webjars/**"
+      - "/favicon.ico"
+      - "/webjars/**"
+      - "/actuator/**"
+      - "/mall-auth/**"
+      - "/mall-search/**"
+      - "/mall-portal/sso/login"
+      - "/mall-portal/sso/register"
+      - "/mall-portal/sso/getAuthCode"
+      - "/mall-portal/home/**"
+      - "/mall-portal/product/**"
+      - "/mall-portal/brand/**"
+      - "/mall-portal/alipay/**"
+      - "/mall-admin/admin/login"
+      - "/mall-admin/admin/register"
+      - "/mall-admin/minio/upload"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+    env:
+      show-values: always
+    configprops:
+      show-values: always
+    info:
+      enabled: true
+knife4j:
+  gateway:
+    enabled: true
+    strategy: discover
+    discover:
+      version: openapi3
+      enabled: true
+      excluded-services: mall-monitor
+    tags-sorter: order
+    operations-sorter: order
+sa-token:
+
+  token-name: Authorization
+
+  timeout: 2592000
+
+  active-timeout: -1
+
+  is-concurrent: true
+  is-share: false
+  token-style: uuid
+  is-log: false
+  is-read-cookie: false
+
+  is-read-header: true
+
+  token-prefix: Bearer
+
+  is-print: false
+

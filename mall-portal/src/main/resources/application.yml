@@ -1,0 +1,108 @@
+server:
+  port: 8085
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    url: jdbc:mysql://localhost:3306/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    druid:
+      initial-size: 5
+      min-idle: 10
+      max-active: 20
+      web-stat-filter:
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+      stat-view-servlet:
+        login-username: druid
+        login-password: druid
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: mall-port
+    redis:
+      host: localhost
+      database: 0
+      port: 6379
+      password:
+      timeout: 3000ms
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /mall
+    username: mall
+    password: mall
+mybatis:
+  mapper-locations:
+    - classpath:dao/*.xml
+    - classpath*:com/**/mapper/*.xml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+    env:
+      show-values: always
+    configprops:
+      show-values: always
+    info:
+      enabled: true
+redis:
+  database: mall-swarm
+  key:
+    authCode: 'ums:authCode'
+    orderId: 'oms:orderId'
+    member: 'ums:member'
+  expire:
+    authCode: 90
+    common: 86400
+rabbitmq:
+  queue:
+    name:
+      cancelOrder: cancelOrderQueue
+springdoc:
+  swagger-ui:
+
+    path: /swagger-ui.html
+
+    enabled: true
+
+    doc-expansion: 'none'
+  api-docs:
+
+    path: /v3/api-docs
+
+    enabled: true
+  group-configs:
+    - group: 'mall-portal'
+      packages-to-scan: com.macro.mall.portal.controller
+sa-token:
+
+  token-name: Authorization
+
+  timeout: 604800
+
+  active-timeout: -1
+
+  is-concurrent: true
+
+  is-share: false
+
+  token-style: uuid
+
+  is-log: false
+
+  is-read-cookie: false
+
+  is-read-header: true
+
+  token-prefix: Bearer
+
+  jwt-secret-key: sa-secret-key123
+
+  is-print: false
